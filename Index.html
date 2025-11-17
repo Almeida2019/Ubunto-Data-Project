@@ -1,0 +1,2745 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubuntu Data Projects - Transforming Data into Insights</title>
+    <link rel="canonical" href="https://ubuntudataprojects.com/">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Performance Optimization: Preload critical images -->
+    <link rel="preload" as="image" href="assets/data-strategy-picture.png">
+    <link rel="preload" as="image" href="assets/kpi-dashboards-picture.png">
+    
+    <!-- Custom Styles -->
+    <style>
+        /* Performance Optimization: Enable hardware acceleration globally */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            position: relative;
+            /* Enable smooth scrolling with GPU acceleration */
+            -webkit-overflow-scrolling: touch;
+            /* Prevent horizontal scrolling on all devices */
+            max-width: 100vw;
+        }
+
+        /* Prevent horizontal overflow globally */
+        html {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        /* Ensure all major containers respect viewport width */
+        * {
+            box-sizing: border-box;
+        }
+
+        section,
+        header,
+        footer,
+        .container {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .section-bg {
+            background-color: #0f172a;
+        }
+        /* Removed @apply rules as they are now inline in the HTML */
+        .map-iframe {
+            filter: grayscale(100%);
+            -webkit-filter: grayscale(100%);
+        }
+
+        /* Enhanced Animated Background - Adjusted for Better Content Contrast */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.7; /* Reduced overall background opacity for better content contrast */
+        }
+        
+        /* Base gradient layer with color shift */
+        .gradient-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, 
+                #0f172a 0%, 
+                #1e293b 25%, 
+                #334155 50%, 
+                #1e293b 75%, 
+                #0f172a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+        
+        /* Floating data nodes - Adjusted opacity for better contrast */
+        .data-node {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0.1) 70%);
+            filter: blur(10px);
+            animation-duration: 15s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+        
+        /* Connection lines between nodes - Adjusted opacity */
+        .connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+            transform-origin: left center;
+            animation: pulse 4s infinite;
+        }
+        
+        /* Floating geometric shapes - Adjusted opacity */
+        .shape {
+            position: absolute;
+            opacity: 0.3; /* Reduced for better content contrast */
+            animation-duration: 25s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 52px solid rgba(59, 130, 246, 0.4); /* Adjusted opacity */
+            animation-name: floatTriangle;
+        }
+        
+        .square {
+            width: 40px;
+            height: 40px;
+            background: rgba(139, 92, 246, 0.4); /* Adjusted opacity */
+            animation-name: floatSquare;
+        }
+        
+        .circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(14, 165, 233, 0.4); /* Adjusted opacity */
+            animation-name: floatCircle;
+        }
+        
+        /* Keyframe animations */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes floatNode1 {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, 30px) scale(1.2); }
+            50% { transform: translate(20px, -40px) scale(0.9); }
+            75% { transform: translate(-30px, 20px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        
+        @keyframes floatNode2 {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-50px, 30px) scale(1.3); }
+            66% { transform: translate(30px, -20px) scale(0.8); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        
+        @keyframes floatNode3 {
+            0% { transform: translate(0, 0) scale(1); }
+            20% { transform: translate(30px, 40px) scale(1.4); }
+            40% { transform: translate(-20px, 10px) scale(0.7); }
+            60% { transform: translate(10px, -30px) scale(1.2); }
+            80% { transform: translate(-40px, 20px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        
+        @keyframes floatNode4 {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -20px) scale(1.5); }
+            50% { transform: translate(-40px, 30px) scale(0.6); }
+            75% { transform: translate(20px, 50px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        
+        @keyframes floatNode5 {
+            0% { transform: translate(0, 0) scale(1); }
+            30% { transform: translate(-30px, 40px) scale(1.3); }
+            60% { transform: translate(50px, -30px) scale(0.8); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        
+        @keyframes floatNode6 {
+            0% { transform: translate(0, 0) scale(1); }
+            40% { transform: translate(40px, 20px) scale(1.4); }
+            80% { transform: translate(-20px, -40px) scale(0.7); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        
+        @keyframes floatTriangle {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        @keyframes floatSquare {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-100px, 30px) rotate(90deg); }
+            50% { transform: translate(-50px, -80px) rotate(180deg); }
+            75% { transform: translate(80px, -30px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        @keyframes floatCircle {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(80px, -60px) scale(1.2); }
+            50% { transform: translate(-60px, -80px) scale(0.8); }
+            75% { transform: translate(-80px, 60px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        @keyframes floatCard {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes growBar {
+            from { transform: scaleY(0.75); }
+            to { transform: scaleY(1.05); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.3; }
+        }
+        
+        /* Ensure content stays above the background */
+        header, main, footer {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Make content backgrounds slightly transparent to show gradient */
+        .content-bg {
+            background-color: rgba(15, 23, 42, 0.85); /* Increased opacity for better content contrast */
+            position: relative;
+        }
+
+        /* Gradient Dividers Between Sections */
+        .content-bg::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(59, 130, 246, 0.3) 20%, 
+                rgba(59, 130, 246, 0.6) 50%, 
+                rgba(59, 130, 246, 0.3) 80%, 
+                transparent 100%);
+        }
+
+        /* Remove divider from last section */
+        .content-bg:last-of-type::after {
+            display: none;
+        }
+
+        /* Box Hover Effects - Reduced on mobile */
+        .neon-box {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3),
+                        inset 0 0 10px rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .neon-box:hover {
+            border: 1px solid rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6),
+                        0 0 40px rgba(59, 130, 246, 0.4),
+                        inset 0 0 20px rgba(59, 130, 246, 0.2);
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        /* Scroll Animation with Stagger Timing */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger animation delays for sequential reveals */
+        .fade-in:nth-child(1) { transition-delay: 0s; }
+        .fade-in:nth-child(2) { transition-delay: 0.1s; }
+        .fade-in:nth-child(3) { transition-delay: 0.2s; }
+        .fade-in:nth-child(4) { transition-delay: 0.3s; }
+        .fade-in:nth-child(5) { transition-delay: 0.4s; }
+        .fade-in:nth-child(6) { transition-delay: 0.5s; }
+        .fade-in:nth-child(7) { transition-delay: 0.6s; }
+        .fade-in:nth-child(8) { transition-delay: 0.7s; }
+        .fade-in:nth-child(9) { transition-delay: 0.8s; }
+
+        /* Enhanced Typography - Gradient Text for Headings - Consistent Blue Accent */
+        .gradient-heading {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Enhanced Section Headings with Gradient - Consistent Blue Accent */
+        .section-heading {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Improved Body Text - WCAG AA Compliant */
+        .body-text {
+            line-height: 1.75;
+            max-width: 48rem; /* max-w-3xl */
+            color: #e2e8f0; /* Ensures 7:1 contrast ratio on dark background */
+        }
+
+        @media (min-width: 640px) {
+            .body-text {
+                line-height: 1.8;
+            }
+        }
+
+        /* WCAG AA Accessibility - Color Contrast Standards */
+        /* All text colors meet WCAG AA standards (4.5:1 for normal text, 3:1 for large text) */
+        /* Primary text: #e2e8f0 on #0f172a background = 12.6:1 ratio ✓ */
+        /* Secondary text: #cbd5e1 on #0f172a background = 10.8:1 ratio ✓ */
+        /* Gray text: #94a3b8 on #0f172a background = 6.2:1 ratio ✓ */
+        /* Blue accent: #3b82f6 on #0f172a background = 4.8:1 ratio ✓ */
+        /* Links: #60a5fa on #0f172a background = 7.1:1 ratio ✓ */
+
+        /* Enhanced Navigation Links with Smooth Underline Animation */
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link span {
+            transform-origin: center;
+        }
+
+        /* Enhanced Social Media Icons Hover with Scale and Rotation - Consistent Blue */
+        .social-icon-hover {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        
+        .social-icon-hover:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5),
+                        0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Enhanced Form Input Styling with Better Focus States */
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background-color: #1e293b;
+            padding: 1rem 1.25rem;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15),
+                        0 0 30px rgba(59, 130, 246, 0.3),
+                        0 4px 20px rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+            background-color: #1e293b;
+        }
+        
+        /* Enhanced Primary Button with Gradient and Glow */
+        button[type="submit"],
+        .primary-button {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            height: 3.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        button[type="submit"]:hover,
+        .primary-button:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5),
+                        0 0 40px rgba(59, 130, 246, 0.4);
+        }
+        
+        button[type="submit"]:active,
+        .primary-button:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+        
+        /* Enhanced Contact Info Icons with Gradient Backgrounds */
+        .contact-icon-wrapper {
+            transition: all 0.3s ease;
+        }
+        
+        .contact-icon-wrapper:hover {
+            transform: scale(1.08);
+        }
+        
+        .contact-icon-circle {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-icon-wrapper:hover .contact-icon-circle {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5),
+                        0 0 30px rgba(59, 130, 246, 0.3);
+            transform: rotate(5deg);
+        }
+        
+        /* Enhanced Map Container */
+        .map-container {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .map-container:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4),
+                        0 0 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .map-iframe-wrapper {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Form Label Enhancement */
+        .form-label {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+        
+        @media (min-width: 640px) {
+            .form-label {
+                font-size: 1.125rem;
+            }
+        }
+
+        /* Hero Section Enhancements */
+        .hero-headline {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            background: linear-gradient(to right, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* CTA Button Enhancement */
+        .cta-button {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+        }
+
+        @media (max-width: 640px) {
+            .cta-button {
+                padding: 0.875rem 1.75rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Hero Enhancements */
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            background: rgba(37, 99, 235, 0.15);
+            color: #bae6fd;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero-visual {
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-card {
+            position: relative;
+            border-radius: 1.75rem;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.26);
+            box-shadow: 0 30px 120px rgba(15, 23, 42, 0.75);
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.75rem;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(14, 165, 233, 0.4));
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+        }
+
+        .hero-card-image {
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+        }
+
+        .hero-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-card-body {
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .hero-card-body p {
+            color: #cbd5f5;
+            font-size: 0.95rem;
+        }
+
+        .hero-floating-card {
+            position: absolute;
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(37, 99, 235, 0.4);
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            animation: floatCard 8s ease-in-out infinite;
+        }
+
+        .hero-floating-card small {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+            color: #93c5fd;
+        }
+
+        .hero-floating-card strong {
+            font-size: 1.75rem;
+            color: #ffffff;
+        }
+
+        .hero-floating-card .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: #bfdbfe;
+        }
+
+        .hero-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.35rem;
+            height: 4.5rem;
+        }
+
+        .hero-chart span {
+            flex: 1;
+            border-radius: 0.5rem;
+            background: linear-gradient(180deg, rgba(125, 211, 252, 0.3), rgba(59, 130, 246, 0.9));
+            animation: growBar 3s ease infinite alternate;
+        }
+
+        .stat-card {
+            border-radius: 1.25rem;
+            padding: 1.25rem 1.5rem;
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.15);
+        }
+
+        .stat-card span {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 0.35rem;
+        }
+
+        .stat-card p {
+            margin-top: 0.35rem;
+            color: #cbd5f5;
+            font-size: 0.95rem;
+        }
+
+        .secondary-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.95rem 1.75rem;
+            border-radius: 0.85rem;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            color: #e2e8f0;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-button:hover {
+            border-color: rgba(59, 130, 246, 0.8);
+            color: #ffffff;
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .service-tags span {
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #bfdbfe;
+        }
+
+        .value-card,
+        .case-card,
+        .insight-card {
+            position: relative;
+            background: rgba(30, 41, 59, 0.85);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 20px 80px rgba(15, 23, 42, 0.65);
+            overflow: hidden;
+        }
+
+        .value-card::before,
+        .case-card::before,
+        .insight-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(147, 197, 253, 0.2));
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+        }
+
+        .value-card:hover::before,
+        .case-card:hover::before,
+        .insight-card:hover::before {
+            opacity: 0.9;
+        }
+
+        .case-image {
+            border-radius: 1rem;
+            overflow: hidden;
+            aspect-ratio: 16 / 10;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .case-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .case-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .case-metric {
+            flex: 1;
+            min-width: 140px;
+            border-radius: 1rem;
+            padding: 0.85rem 1rem;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            text-align: left;
+        }
+
+        .case-metric strong {
+            display: block;
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        .case-metric span {
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #93c5fd;
+        }
+
+        .process-step {
+            position: relative;
+            border-radius: 1.5rem;
+            padding: 1.75rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .process-step span {
+            display: inline-flex;
+            height: 2.5rem;
+            width: 2.5rem;
+            border-radius: 9999px;
+            align-items: center;
+            justify-content: center;
+            background: rgba(37, 99, 235, 0.2);
+            color: #bfdbfe;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .process-step h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-card ul {
+            margin-top: 1rem;
+        }
+
+        .insight-card li {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            color: #e2e8f0;
+            margin-bottom: 0.75rem;
+        }
+
+        .tool-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .insight-card .tool-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        /* Clickable service boxes */
+        .service-box-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .service-box-link:hover {
+            color: inherit;
+        }
+
+        /* Enhanced Service Card Styles */
+        .service-card {
+            position: relative;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            /* CSS containment for better rendering performance */
+            contain: layout style paint;
+        }
+
+        /* Gradient Border Effect using Pseudo-element - Consistent Blue Accent */
+        .service-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 2px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0.5;
+            transition: opacity 0.4s ease;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Enhanced Hover State with Multi-layer Shadows - Consistent Blue */
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.03) rotate(0.5deg);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3),
+                        0 0 40px rgba(59, 130, 246, 0.2),
+                        inset 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Service Image Container with Aspect Ratio */
+        .service-image {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+
+        .service-image img {
+            transition: transform 0.6s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Image Zoom Effect on Card Hover */
+        .service-card:hover .service-image img {
+            transform: scale(1.1);
+        }
+
+        /* Overlay Gradient on Image */
+        .service-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.6), transparent);
+            pointer-events: none;
+        }
+
+        /* Enhanced "Learn More" Link with Arrow Animation */
+        .learn-more-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3b82f6;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .learn-more-link .arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .learn-more-link .arrow {
+            transform: translateX(4px);
+        }
+
+        .learn-more-link:hover {
+            color: #60a5fa;
+        }
+
+        /* Enhanced Testimonial Card Styles */
+        .testimonial-card {
+            position: relative;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+            /* CSS containment for better rendering performance */
+            contain: layout style paint;
+        }
+
+        /* Gradient Border Effect for Testimonial Cards - Consistent Blue */
+        .testimonial-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 2px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0.4;
+            transition: opacity 0.4s ease;
+        }
+
+        .testimonial-card:hover::before {
+            opacity: 0.8;
+        }
+
+        /* Subtle Hover Effect for Testimonial Cards - Consistent Blue */
+        .testimonial-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.25),
+                        0 0 30px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Enhanced Quote Formatting */
+        .testimonial-quote {
+            position: relative;
+            font-style: italic;
+            line-height: 1.75;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 4rem;
+            color: rgba(59, 130, 246, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        /* Testimonial Profile Image with Gradient Border */
+        .testimonial-profile-img {
+            position: relative;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .testimonial-profile-img::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            z-index: -1;
+        }
+
+        @media (min-width: 640px) {
+            .testimonial-profile-img {
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+        }
+
+        /* Enhanced Team Member Card Styles */
+        .team-member-card {
+            position: relative;
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            /* CSS containment for better rendering performance */
+            contain: layout style paint;
+        }
+
+        /* Gradient Border Effect for Team Cards - Consistent Blue */
+        .team-member-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 2px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0.3;
+            transition: opacity 0.4s ease;
+        }
+
+        .team-member-card:hover::before {
+            opacity: 0.7;
+        }
+
+        /* Subtle Hover Effect for Team Cards - Consistent Blue */
+        .team-member-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2),
+                        0 0 25px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Team Member Profile Image with Gradient Border */
+        .team-profile-img {
+            position: relative;
+            width: 8rem;
+            height: 8rem;
+            border-radius: 50%;
+            overflow: visible;
+            flex-shrink: 0;
+        }
+
+        .team-profile-img::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            z-index: -1;
+            animation: rotate-gradient 3s linear infinite;
+        }
+
+        .team-profile-img img {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (min-width: 640px) {
+            .team-profile-img {
+                width: 10rem;
+                height: 10rem;
+            }
+        }
+
+        /* Gradient Rotation Animation */
+        @keyframes rotate-gradient {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Enhanced Industry Card Styles */
+        .industry-card {
+            position: relative;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            min-height: 200px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            /* CSS containment for better rendering performance */
+            contain: layout style paint;
+        }
+
+        /* Gradient Border Effect for Industry Cards - Consistent Blue */
+        .industry-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem;
+            padding: 2px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0.3;
+            transition: opacity 0.4s ease;
+        }
+
+        .industry-card:hover::before {
+            opacity: 0.7;
+        }
+
+        /* Subtle Hover Effect for Industry Cards - Consistent Blue */
+        .industry-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.25),
+                        0 0 30px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Industry Card Title Enhancement - Consistent Blue Accent */
+        .industry-card h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+            .industry-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Industry Card Content Spacing */
+        .industry-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Performance Optimizations - GPU Acceleration */
+        /* Add will-change to frequently animated elements for better performance */
+        .service-card,
+        .testimonial-card,
+        .team-member-card,
+        .industry-card,
+        .cta-button,
+        .primary-button,
+        button[type="submit"],
+        .social-icon-hover,
+        .contact-icon-wrapper,
+        .learn-more-link .arrow {
+            will-change: transform;
+        }
+
+        .fade-in {
+            will-change: opacity, transform;
+        }
+
+        .nav-link span {
+            will-change: width;
+        }
+
+        /* Remove will-change after animation completes to free resources */
+        .fade-in.visible {
+            will-change: auto;
+        }
+
+        /* Ensure all animations use GPU-accelerated properties only */
+        /* All transform and opacity animations are already GPU-accelerated */
+        /* Force GPU acceleration with translateZ(0) for critical elements */
+        .service-card,
+        .testimonial-card,
+        .team-member-card,
+        .industry-card {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        /* Accessibility: Respect user's motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                will-change: auto !important;
+            }
+            
+            .animated-bg {
+                opacity: 0.3;
+            }
+            
+            .data-node,
+            .connection,
+            .shape {
+                animation: none !important;
+            }
+            
+            .fade-in {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* Extra Small Mobile Devices (320px and up) */
+        @media (max-width: 480px) {
+            /* Ensure minimum touch target size of 44x44px */
+            button,
+            a,
+            input[type="submit"],
+            .mobile-menu-button,
+            .nav-link,
+            .social-icon-hover,
+            .contact-icon-wrapper {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            /* Adjust hero section for very small screens */
+            .hero-headline {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+
+            /* Reduce padding for extra small screens */
+            section {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            /* Adjust card padding */
+            .service-card,
+            .testimonial-card,
+            .industry-card,
+            .team-member-card {
+                padding: 1.25rem;
+            }
+
+            /* Adjust form inputs for small screens */
+            input[type="text"],
+            input[type="email"],
+            textarea {
+                padding: 0.875rem 1rem;
+                font-size: 1rem;
+            }
+
+            /* Ensure buttons are properly sized */
+            .cta-button,
+            .primary-button,
+            button[type="submit"] {
+                min-height: 48px;
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            /* Adjust social icons */
+            .social-icon-hover {
+                width: 48px;
+                height: 48px;
+                font-size: 1.25rem;
+            }
+
+            /* Adjust contact icons */
+            .contact-icon-circle {
+                width: 48px;
+                height: 48px;
+                font-size: 1.25rem;
+            }
+
+            /* Reduce section headings */
+            .section-heading {
+                font-size: 1.75rem;
+            }
+
+            /* Adjust grid gaps */
+            .grid {
+                gap: 1rem;
+            }
+
+            /* Ensure proper spacing in containers */
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            /* Prevent any element from causing horizontal scroll */
+            * {
+                max-width: 100%;
+            }
+
+            /* Ensure images don't overflow */
+            img {
+                width: 100%;
+                height: auto;
+            }
+
+            /* Adjust navigation for smallest screens */
+            nav .text-xl {
+                font-size: 1.125rem;
+            }
+
+            /* Ensure proper word breaking */
+            h1, h2, h3, h4, h5, h6, p, a, span {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
+            }
+        }
+
+        /* Specific optimizations for 320px width */
+        @media (max-width: 320px) {
+            /* Ultra-compact layout for smallest devices */
+            .container {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            .hero-headline {
+                font-size: 1.75rem;
+            }
+
+            .section-heading {
+                font-size: 1.5rem;
+            }
+
+            /* Reduce card padding further */
+            .service-card,
+            .testimonial-card,
+            .industry-card,
+            .team-member-card {
+                padding: 1rem;
+            }
+
+            /* Adjust button text size */
+            .cta-button,
+            .primary-button,
+            button[type="submit"] {
+                font-size: 0.9375rem;
+                padding: 0.625rem 1.25rem;
+            }
+
+            /* Reduce body text slightly */
+            .body-text {
+                font-size: 0.875rem;
+            }
+
+            /* Adjust social icon size */
+            .social-icon-hover {
+                width: 44px;
+                height: 44px;
+                font-size: 1.125rem;
+            }
+
+            /* Adjust contact icon size */
+            .contact-icon-circle {
+                width: 44px;
+                height: 44px;
+                font-size: 1.125rem;
+            }
+        }
+
+        /* Mobile optimizations - Enhanced for Performance */
+        @media (max-width: 768px) {
+            /* Reduce animation complexity on mobile for better performance */
+            /* Disable will-change on mobile to save memory */
+            .service-card,
+            .testimonial-card,
+            .team-member-card,
+            .industry-card,
+            .cta-button,
+            .primary-button,
+            button[type="submit"],
+            .social-icon-hover,
+            .contact-icon-wrapper,
+            .learn-more-link .arrow,
+            .fade-in,
+            .nav-link span {
+                will-change: auto;
+            }
+
+            /* Simplify animations - use only translateY for better performance */
+            .neon-box:hover {
+                transform: translateY(-5px) translateZ(0);
+            }
+            
+            /* Simplified industry card hover on mobile */
+            .industry-card {
+                min-height: 180px;
+            }
+            
+            .industry-card:hover {
+                transform: translateY(-3px) translateZ(0);
+            }
+            
+            /* Simplified service card hover on mobile - remove scale and rotation */
+            .service-card:hover {
+                transform: translateY(-5px) translateZ(0);
+            }
+            
+            /* Reduce image zoom on mobile for performance */
+            .service-card:hover .service-image img {
+                transform: scale(1.05) translateZ(0);
+            }
+
+            /* Simplified testimonial card hover on mobile - remove scale */
+            .testimonial-card:hover {
+                transform: translateY(-4px) translateZ(0);
+            }
+
+            /* Simplified team card hover on mobile */
+            .team-member-card:hover {
+                transform: translateY(-3px) translateZ(0);
+            }
+
+            /* Adjust testimonial card min-height for mobile */
+            .testimonial-card {
+                min-height: 350px;
+            }
+
+            /* Reduce shadow complexity on mobile for better performance */
+            .service-card:hover {
+                box-shadow: 0 15px 40px rgba(59, 130, 246, 0.25);
+            }
+
+            .testimonial-card:hover {
+                box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+            }
+
+            .team-member-card:hover {
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+            }
+
+            .industry-card:hover {
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+            }
+
+            /* Simplify button hover effects on mobile */
+            .cta-button:hover,
+            .primary-button:hover,
+            button[type="submit"]:hover {
+                transform: translateY(-2px) translateZ(0);
+                box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+            }
+
+            /* Reduce background animation complexity on mobile */
+            .data-node {
+                animation-duration: 20s; /* Slower animations for better performance */
+            }
+
+            .connection {
+                animation-duration: 6s;
+            }
+
+            /* Disable gradient rotation animation on mobile */
+            .team-profile-img::before {
+                animation: none;
+            }
+            
+            .mobile-text-center {
+                text-align: center;
+            }
+            
+            .mobile-px-4 {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .mobile-py-16 {
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+            
+            /* Fix for horizontal scrolling */
+            body {
+                overflow-x: hidden;
+                width: 100%;
+            }
+            
+            /* Ensure all containers fit within viewport */
+            .container {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            /* Hero adjustments for mobile */
+            .hero-visual {
+                padding: 1rem 0;
+            }
+
+            .hero-floating-card {
+                position: relative;
+                inset: unset !important;
+                margin-top: 1rem;
+                animation: none;
+            }
+            
+            /* Reduce padding on smaller screens */
+            .content-bg {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            /* Adjust animated elements for mobile */
+            .data-node {
+                width: 120px !important;
+                height: 120px !important;
+                filter: blur(20px);
+            }
+            
+            .shape {
+                display: none; /* Hide complex shapes on mobile for performance */
+            }
+            
+            /* Ensure all images are responsive */
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            
+            /* Fix for iframe maps */
+            .map-iframe {
+                width: 100% !important;
+            }
+            
+            /* Ensure text doesn't overflow */
+            h1, h2, h3, p {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+            
+            /* Adjust hero section for mobile */
+            #home h1 {
+                font-size: 1.75rem;
+                line-height: 2.25rem;
+            }
+            
+            /* Fix form elements */
+            input, textarea {
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            /* Ensure touch targets are properly sized (44x44px minimum) */
+            #mobile-menu-button {
+                min-width: 44px;
+                min-height: 44px;
+                padding: 0.5rem;
+            }
+
+            /* Mobile menu links touch targets */
+            #mobile-menu a {
+                min-height: 48px;
+                display: flex;
+                align-items: center;
+            }
+
+            /* Adjust navigation padding for better touch targets */
+            nav {
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+
+            /* Ensure proper spacing between interactive elements */
+            .social-icon-hover,
+            .contact-icon-wrapper {
+                margin: 0.25rem;
+            }
+
+            /* Adjust team profile images for mobile */
+            .team-profile-img {
+                width: 6rem;
+                height: 6rem;
+            }
+
+            /* Adjust testimonial profile images */
+            .testimonial-profile-img {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            /* Reduce hero section padding on mobile */
+            #home {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            /* Adjust service image aspect ratio for mobile */
+            .service-image {
+                aspect-ratio: 16 / 10;
+            }
+
+            /* Ensure proper line height for readability */
+            .body-text {
+                line-height: 1.7;
+                font-size: 0.9375rem;
+            }
+
+            /* Adjust map container for mobile */
+            .map-container {
+                padding: 1rem;
+            }
+
+            .map-iframe-wrapper {
+                height: 200px;
+            }
+
+            /* Reduce testimonial card min-height for better mobile layout */
+            .testimonial-card {
+                min-height: 300px;
+            }
+
+            /* Adjust industry card for mobile */
+            .industry-card {
+                min-height: 160px;
+                padding: 1.25rem;
+            }
+
+            /* Ensure footer links have proper touch targets */
+            footer a {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem;
+            }
+
+            /* Adjust learn more link for better touch target */
+            .learn-more-link {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem 0;
+            }
+
+            /* Prevent text from being too small */
+            body {
+                font-size: 16px;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            /* Ensure proper spacing in form */
+            form .space-y-6 > * + * {
+                margin-top: 1.25rem;
+            }
+
+            /* Adjust contact section grid for mobile */
+            #contact .grid {
+                gap: 2rem;
+            }
+
+            /* Ensure proper spacing in hero section */
+            #home .space-y-8 > * + * {
+                margin-top: 1.5rem;
+            }
+        }
+
+        /* Tablet Breakpoint Refinements (481px - 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            /* Optimize for tablet sizes */
+            .hero-headline {
+                font-size: 2.5rem;
+            }
+
+            .section-heading {
+                font-size: 2.25rem;
+            }
+
+            /* Adjust card padding for tablets */
+            .service-card,
+            .testimonial-card,
+            .industry-card,
+            .team-member-card {
+                padding: 1.75rem;
+            }
+
+            /* Ensure proper touch targets on tablets */
+            button,
+            a,
+            input[type="submit"] {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            /* Adjust grid gaps for tablets */
+            .grid {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <!-- Enhanced Animated Background with Increased Opacity -->
+    <div class="animated-bg">
+        <div class="gradient-layer"></div>
+        
+        <!-- Data Nodes -->
+        <div class="data-node" style="width: 200px; height: 200px; top: 5%; left: 5%; animation-name: floatNode1;"></div>
+        <div class="data-node" style="width: 180px; height: 180px; bottom: 10%; right: 5%; animation-name: floatNode2;"></div>
+        <div class="data-node" style="width: 160px; height: 160px; top: 50%; right: 15%; animation-name: floatNode3;"></div>
+        <div class="data-node" style="width: 220px; height: 220px; bottom: 25%; left: 10%; animation-name: floatNode4;"></div>
+        <div class="data-node" style="width: 140px; height: 140px; top: 20%; right: 30%; animation-name: floatNode5;"></div>
+        <div class="data-node" style="width: 120px; height: 120px; bottom: 40%; left: 40%; animation-name: floatNode6;"></div>
+        
+        <!-- Connection Lines -->
+        <div class="connection" style="top: 15%; left: 15%; width: 200px; transform: rotate(30deg); animation-delay: 0s;"></div>
+        <div class="connection" style="top: 60%; right: 20%; width: 180px; transform: rotate(120deg); animation-delay: 1s;"></div>
+        <div class="connection" style="bottom: 30%; left: 30%; width: 220px; transform: rotate(75deg); animation-delay: 2s;"></div>
+        <div class="connection" style="top: 40%; left: 50%; width: 150px; transform: rotate(160deg); animation-delay: 3s;"></div>
+        
+        <!-- Geometric Shapes -->
+        <div class="shape triangle" style="top: 15%; left: 80%;"></div>
+        <div class="shape square" style="top: 70%; left: 10%;"></div>
+        <div class="shape circle" style="top: 10%; left: 60%;"></div>
+        <div class="shape triangle" style="bottom: 20%; right: 15%;"></div>
+        <div class="shape square" style="bottom: 10%; left: 70%;"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-slate-900/90 backdrop-blur-sm shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <div>
+                <a href="https://ubuntudataprojects.com/" class="text-xl sm:text-2xl font-bold text-white">
+                    Ubuntu <span class="text-blue-500">Data Projects</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex space-x-6 lg:space-x-8 items-center">
+                <a href="#" class="nav-link group relative inline-block text-gray-300 hover:text-blue-400 py-2 text-sm lg:text-base">
+                    Home
+                    <span class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300 ease-out group-hover:w-full group-hover:left-0"></span>
+                </a>
+                <a href="#services" class="nav-link group relative inline-block text-gray-300 hover:text-blue-400 py-2 text-sm lg:text-base">
+                    Services
+                    <span class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300 ease-out group-hover:w-full group-hover:left-0"></span>
+                </a>
+                <a href="#about" class="nav-link group relative inline-block text-gray-300 hover:text-blue-400 py-2 text-sm lg:text-base">
+                    About Us
+                    <span class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300 ease-out group-hover:w-full group-hover:left-0"></span>
+                </a>
+                <a href="#industries" class="nav-link group relative inline-block text-gray-300 hover:text-blue-400 py-2 text-sm lg:text-base">
+                    Industries
+                    <span class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300 ease-out group-hover:w-full group-hover:left-0"></span>
+                </a>
+                <a href="#testimonials" class="nav-link group relative inline-block text-gray-300 hover:text-blue-400 py-2 text-sm lg:text-base">
+                    Testimonials
+                    <span class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300 ease-out group-hover:w-full group-hover:left-0"></span>
+                </a>
+                <a href="#contact" class="nav-link group relative inline-block text-gray-300 hover:text-blue-400 py-2 text-sm lg:text-base">
+                    Contact
+                    <span class="absolute bottom-0 left-1/2 h-0.5 w-0 bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300 ease-out group-hover:w-full group-hover:left-0"></span>
+                </a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-200 hover:text-blue-400 focus:outline-none transition-all duration-300 ease p-2" style="min-width: 44px; min-height: 44px;" aria-label="Toggle mobile menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="https://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900 text-gray-300">
+            <a href="#" class="block px-6 py-3 hover:bg-slate-800 hover:text-blue-400 transition-all duration-300 ease">Home</a>
+            <a href="#services" class="block px-6 py-3 hover:bg-slate-800 hover:text-blue-400 transition-all duration-300 ease">Services</a>
+            <a href="#about" class="block px-6 py-3 hover:bg-slate-800 hover:text-blue-400 transition-all duration-300 ease">About Us</a>
+            <a href="#industries" class="block px-6 py-3 hover:bg-slate-800 hover:text-blue-400 transition-all duration-300 ease">Industries</a>
+            <a href="#testimonials" class="block px-6 py-3 hover:bg-slate-800 hover:text-blue-400 transition-all duration-300 ease">Testimonials</a>
+            <a href="#contact" class="block px-6 py-3 hover:bg-slate-800 hover:text-blue-400 transition-all duration-300 ease">Contact</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        
+        <!-- Hero Section - Premium layout with data storytelling -->
+        <section id="home" class="py-20 md:py-32 lg:py-40 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 relative z-10">
+                <div class="grid gap-12 lg:gap-16 lg:grid-cols-2 items-center">
+                    <div class="space-y-8 text-left fade-in">
+                        <p class="hero-pill">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-400 inline-block"></span>
+                            Data Transformation Studio
+                        </p>
+                        <h1 class="hero-headline text-4xl sm:text-5xl lg:text-6xl">
+                            Confident decisions start with orchestrated <span class="text-blue-400">data.</span>
+                        </h1>
+                        <p class="text-lg sm:text-xl text-gray-300 max-w-2xl leading-relaxed body-text">
+                            Ubuntu Data Projects blends strategy, engineering, and design to turn scattered information into live control rooms for executives, operators, and investors across Africa.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#contact" class="cta-button inline-flex items-center gap-2">
+                                <span>Book a strategy call</span>
+                                <i class="fas fa-arrow-trend-up"></i>
+                            </a>
+                            <a href="#case-studies" class="secondary-button">
+                                <span>See proof of value</span>
+                            </a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 sm:gap-6">
+                            <div class="stat-card">
+                                <span>Time to insight</span>
+                                <strong>6 Weeks</strong>
+                                <p>Executive cockpit live</p>
+                            </div>
+                            <div class="stat-card">
+                                <span>Data quality uplift</span>
+                                <strong>98%</strong>
+                                <p>Validated & governed fields</p>
+                            </div>
+                            <div class="stat-card">
+                                <span>ROI captured</span>
+                                <strong>12x</strong>
+                                <p>Average first-year value</p>
+                            </div>
+                            <div class="stat-card">
+                                <span>Stakeholder adoption</span>
+                                <strong>87%</strong>
+                                <p>Teams using dashboards weekly</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-white/10">
+                            <p class="text-[0.65rem] uppercase tracking-[0.45em] text-slate-400 mb-3">
+                                Embedded in teams using
+                            </p>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="tool-pill">Power BI</span>
+                                <span class="tool-pill">Azure</span>
+                                <span class="tool-pill">Snowflake</span>
+                                <span class="tool-pill">Tableau</span>
+                                <span class="tool-pill">AWS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-visual fade-in">
+                        <div class="hero-card">
+                            <div class="hero-card-image">
+                                <img src="assets/kpi-dashboards-picture.png" alt="Executive dashboards preview" class="w-full h-full object-cover">
+                            </div>
+                            <div class="hero-card-body">
+                                <p class="text-xs uppercase tracking-[0.4em] text-blue-200">Live KPI cockpit</p>
+                                <h3 class="text-2xl font-bold text-white">One operating view for the C-suite</h3>
+                                <p>Blend finance, revenue, and operational signals into a single experience with proactive alerts, scenario toggles, and automated commentary.</p>
+                                <ul class="text-sm text-gray-300 space-y-2 mt-2">
+                                    <li class="flex items-center gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem]"></i> Automated trust scores on every metric</li>
+                                    <li class="flex items-center gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem]"></i> Narrative insights for non-technical teams</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="hero-floating-card" style="top:-1rem; right:-0.5rem; animation-delay: 0.2s;">
+                            <small>Realtime adoption</small>
+                            <strong>87%</strong>
+                            <p class="text-sm text-gray-300 mt-1">Daily active leaders</p>
+                            <span class="badge"><i class="fas fa-signal"></i> Power BI</span>
+                        </div>
+                        <div class="hero-floating-card" style="bottom:-0.5rem; left: 0.25rem; animation-delay: 0.6s;">
+                            <small>Forecast accuracy</small>
+                            <strong>+32%</strong>
+                            <div class="hero-chart mt-3">
+                                <span style="height: 70%; animation-delay: 0.2s;"></span>
+                                <span style="height: 90%; animation-delay: 0.4s;"></span>
+                                <span style="height: 55%; animation-delay: 0.6s;"></span>
+                                <span style="height: 80%; animation-delay: 0.8s;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section - Optimized for mobile -->
+        <section id="services" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
+                <div class="max-w-3xl mx-auto text-center fade-in space-y-6">
+                    <h2 class="section-heading">Solutions Built For Momentum</h2>
+                    <p class="text-lg sm:text-xl text-gray-300 body-text mx-auto">
+                        Deploy <span class="text-blue-500 font-medium">strategy, intelligence, and enablement</span> squads that turn raw datasets into trusted, automated decision frameworks.
+                    </p>
+                    <div class="flex flex-wrap gap-3 justify-center text-xs uppercase tracking-[0.3em] text-slate-300">
+                        <span class="tool-pill">Strategy</span>
+                        <span class="tool-pill">Dashboards</span>
+                        <span class="tool-pill">Automation</span>
+                        <span class="tool-pill">AI Enablement</span>
+                    </div>
+                </div>
+                
+                <div class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
+                    
+                    <!-- Service 1: Data Strategy & Health Check -->
+                    <a href="services.html#data-strategy" class="service-box-link">
+                        <div class="service-card p-6 sm:p-8 fade-in h-full space-y-4">
+                            <div class="service-image">
+                                <img src="assets/data-strategy-picture.png" class="w-full h-full object-cover" alt="Data Strategy & Health Check" loading="eager">
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-white">Data Strategy & Health Check</h3>
+                            <p class="text-base sm:text-lg text-gray-300 body-text">
+                                Blueprint your modern data stack with a crisp roadmap, investment plan, and governance scorecard tailored to your business goals.
+                            </p>
+                            <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Data maturity audit & operating model design</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Implementation playbook with prioritized sprints</li>
+                            </ul>
+                            <div class="service-tags">
+                                <span>Strategy</span>
+                                <span>Governance</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Service 2: KPI & Performance Dashboards -->
+                    <a href="services.html#kpi-dashboards" class="service-box-link">
+                        <div class="service-card p-6 sm:p-8 fade-in h-full space-y-4">
+                            <div class="service-image">
+                                <img src="assets/kpi-dashboards-picture.png" class="w-full h-full object-cover" alt="KPI & Performance Dashboards" loading="lazy">
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-white">KPI & Performance Dashboards</h3>
+                            <p class="text-base sm:text-lg text-gray-300 body-text">
+                                Give leaders a unified version of the truth with beautifully crafted scorecards, alerts, and self-service drilldowns.
+                            </p>
+                            <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Real-time performance monitoring & commentary</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Embedded collaboration with Teams, Slack & mail</li>
+                            </ul>
+                            <div class="service-tags">
+                                <span>Analytics</span>
+                                <span>Storytelling</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Service 3: Database Design & Automation -->
+                    <a href="services.html#database-design" class="service-box-link">
+                        <div class="service-card p-6 sm:p-8 fade-in h-full space-y-4">
+                            <div class="service-image">
+                                <img src="assets/database-design-picture.png" class="w-full h-full object-cover" alt="Database Design & Automation" loading="lazy">
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-white">Database Design & Automation</h3>
+                            <p class="text-base sm:text-lg text-gray-300 body-text">
+                                Engineer resilient data models, pipelines, and integrations that keep every metric fresh without manual effort.
+                            </p>
+                            <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Source system connectors, APIs, and RPA ingestion</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Data warehouse modelling & automated QA alerts</li>
+                            </ul>
+                            <div class="service-tags">
+                                <span>Engineering</span>
+                                <span>Automation</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Service 4: Customer & Product Analytics -->
+                    <a href="services.html#customer-analytics" class="service-box-link">
+                        <div class="service-card p-6 sm:p-8 fade-in h-full space-y-4">
+                            <div class="service-image">
+                                <img src="assets/customer-analytics-picture.png" class="w-full h-full object-cover" alt="Customer & Product Analytics" loading="lazy">
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-white">Customer & Product Analytics</h3>
+                            <p class="text-base sm:text-lg text-gray-300 body-text">
+                                Reveal the journeys, offers, and experiences that drive loyalty using segmentation, churn modelling, and experimentation.
+                            </p>
+                            <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Golden customer record & propensity scoring</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Experiment tracking with win/loss automation</li>
+                            </ul>
+                            <div class="service-tags">
+                                <span>Insights</span>
+                                <span>Experience</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Service 5: Predictive Analysis & Forecasting -->
+                    <a href="services.html#predictive-analysis" class="service-box-link">
+                        <div class="service-card p-6 sm:p-8 fade-in h-full space-y-4">
+                            <div class="service-image">
+                                <img src="assets/predictive-analysis-picture.png" class="w-full h-full object-cover" alt="Predictive Analysis & Forecasting" loading="lazy">
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-white">Predictive Analysis & Forecasting</h3>
+                            <p class="text-base sm:text-lg text-gray-300 body-text">
+                                Move from reactive reporting to proactive scenario planning powered by AI, machine learning, and advanced forecasting.
+                            </p>
+                            <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Demand, revenue, and risk simulations</li>
+                                <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Executive-ready explanations for every prediction</li>
+                            </ul>
+                            <div class="service-tags">
+                                <span>AI</span>
+                                <span>Planning</span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Engagement Playbook Section -->
+        <section id="solutions" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10 space-y-12">
+                <div class="max-w-3xl mx-auto text-center fade-in space-y-6">
+                    <h2 class="section-heading">How We Partner</h2>
+                    <p class="text-lg sm:text-xl text-gray-300 body-text mx-auto">
+                        A multidisciplinary squad works alongside your team to deliver fast wins, then scales the platform with governance and enablement.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="value-card fade-in space-y-4">
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Phase 01</p>
+                        <h3 class="text-2xl font-extrabold text-white">Strategy Sprints</h3>
+                        <p class="text-gray-300 text-base leading-relaxed">
+                            In two weeks we run discovery interviews, audit your tech stack, and define KPIs, guardrails, and investment priorities.
+                        </p>
+                        <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Business value canvas & roadmap</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Business glossary + governance kit</li>
+                        </ul>
+                    </div>
+                    <div class="value-card fade-in space-y-4">
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Phase 02</p>
+                        <h3 class="text-2xl font-extrabold text-white">Insight Factory</h3>
+                        <p class="text-gray-300 text-base leading-relaxed">
+                            We engineer the modern data stack, stand up dashboards, and automate the workflows that used to drain your analysts.
+                        </p>
+                        <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Cloud data warehouse & quality guardrails</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Design-led dashboards with proactive alerts</li>
+                        </ul>
+                    </div>
+                    <div class="value-card fade-in space-y-4">
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Phase 03</p>
+                        <h3 class="text-2xl font-extrabold text-white">Change & Enablement</h3>
+                        <p class="text-gray-300 text-base leading-relaxed">
+                            Adoption pods coach your teams, measuring engagement and knowledge with digital academies and playbooks.
+                        </p>
+                        <ul class="space-y-2 text-sm sm:text-base text-gray-300">
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Enablement journeys & live clinics</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check text-blue-400 pt-1"></i> Adoption dashboards & automation handover</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="process-step fade-in">
+                        <span>01</span>
+                        <h3>Discover</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            CXOs, product leads, and finance collaborate in a working session to define success metrics, governance, and data contracts.
+                        </p>
+                    </div>
+                    <div class="process-step fade-in">
+                        <span>02</span>
+                        <h3>Build</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Ubuntu squads co-build models, dashboards, and automations in weekly increments with rigorous QA and user testing.
+                        </p>
+                    </div>
+                    <div class="process-step fade-in">
+                        <span>03</span>
+                        <h3>Scale</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            We embed playbooks, publish training, and track adoption health so your team can sustain the platform with confidence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New About Us Section - Optimized for mobile -->
+        <section id="about" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10 space-y-12">
+                <div class="max-w-4xl mx-auto text-center fade-in space-y-6">
+                    <h2 class="section-heading">About Us</h2>
+                    <p class="text-base sm:text-lg text-white body-text mx-auto">
+                        Your Partner in Data-Driven Growth
+                    </p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto fade-in">
+                    <p class="text-base sm:text-lg text-gray-300 text-center body-text mx-auto">
+                        Ubuntu Data Projects is a leading data analytics firm based in Johannesburg, South Africa.
+                        Our mission is to empower South African businesses with actionable insights derived from
+                        data, fostering sustainable growth and competitive advantage. Founded in 2021 by Nkanyiso
+                        Dube and Thabiso Ndebele, we bring together a team of experienced data scientists,
+                        analysts, and engineers dedicated to solving complex business challenges through data-
+                        driven solutions. We believe in the transformative power of data and are committed to helping
+                        our clients unlock their full potential.
+                    </p>
+                </div>
+                
+                <!-- Meet The Team Section -->
+                <div class="space-y-12">
+                    <div class="max-w-4xl mx-auto text-center fade-in space-y-6">
+                        <h2 class="section-heading">Meet The Team</h2>
+                        <p class="text-base sm:text-lg text-gray-300 body-text mx-auto">
+                            The brilliant minds behind our success.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 max-w-5xl mx-auto">
+                        
+                        <!-- Team Member 1: Nkanyiso Dube -->
+                        <div class="team-member-card flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-6 fade-in">
+                            <div class="team-profile-img">
+                                <img src="assets/nkanyiso-dube.jpeg" class="w-full h-full object-cover" alt="Nkanyiso Dube" loading="lazy">
+                            </div>
+                            <div class="text-center sm:text-left space-y-3 flex-1">
+                                <h3 class="text-xl sm:text-2xl font-extrabold text-white">Nkanyiso Dube</h3>
+                                <p class="text-blue-400 font-semibold text-base sm:text-lg">Founder & CEO</p>
+                                <p class="text-sm sm:text-base text-gray-300 body-text leading-relaxed">
+                                    Nkanyiso leads Ubuntu Data Projects with a vision to revolutionize data
+                                    analytics in South Africa. With over 3 years of experience in the tech industry,
+                                    he brings a wealth of knowledge in business strategy and data science.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Team Member 2: Thabiso Ndebele -->
+                        <div class="team-member-card flex flex-col sm:flex-row items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-6 fade-in">
+                            <div class="team-profile-img">
+                                <img src="assets/thabiso-ndebele.jpg" class="w-full h-full object-cover" alt="Thabiso Ndebele" loading="lazy">
+                            </div>
+                            <div class="text-center sm:text-left space-y-3 flex-1">
+                                <h3 class="text-xl sm:text-2xl font-extrabold text-white">Thabiso Ndebele</h3>
+                                <p class="text-blue-400 font-semibold text-base sm:text-lg">Co-Founder & Chief Data Officer</p>
+                                <p class="text-sm sm:text-base text-gray-300 body-text leading-relaxed">
+                                    Thabiso is a seasoned data scientist with a passion for extracting meaningful
+                                    insights from complex datasets. He oversees the technical direction of the
+                                    company, ensuring the delivery of cutting-edge data solutions.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Studies Section -->
+        <section id="case-studies" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10 space-y-12">
+                <div class="max-w-4xl mx-auto text-center fade-in space-y-6">
+                    <h2 class="section-heading">Proof of Value</h2>
+                    <p class="text-lg sm:text-xl text-gray-300 body-text mx-auto">
+                        Recent engagements that paired executive ambition with Ubuntu Data expertise.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <article class="case-card fade-in">
+                        <div class="case-image">
+                            <img src="assets/customer-analytics-picture.png" alt="360 degree customer analytics dashboard" class="w-full h-full object-cover" loading="lazy">
+                        </div>
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Retail Banking</p>
+                        <h3 class="text-2xl font-bold text-white mt-2">360° Client Intelligence Hub</h3>
+                        <p class="text-gray-300 text-base leading-relaxed mt-3">
+                            Built a unified view of every customer, consolidating 14 systems into one action board with churn, cross-sell, and service signals.
+                        </p>
+                        <ul class="space-y-2 text-sm sm:text-base text-gray-300 mt-4">
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem] mt-2"></i> Customer DNA stitched from CRM, core banking, and digital touchpoints</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem] mt-2"></i> Relationship managers receive prioritized plays via Teams each morning</li>
+                        </ul>
+                        <div class="case-metrics">
+                            <div class="case-metric">
+                                <strong>+38%</strong>
+                                <span>NPS uplift</span>
+                            </div>
+                            <div class="case-metric">
+                                <strong>4.5x</strong>
+                                <span>Cross-sell</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="case-card fade-in">
+                        <div class="case-image">
+                            <img src="assets/database-design-picture.png" alt="Operations control tower" class="w-full h-full object-cover" loading="lazy">
+                        </div>
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Logistics</p>
+                        <h3 class="text-2xl font-bold text-white mt-2">Operations Control Tower</h3>
+                        <p class="text-gray-300 text-base leading-relaxed mt-3">
+                            Designed a cloud warehouse and automation fabric that synchronizes fleet, finance, and warehouse signals every 15 minutes.
+                        </p>
+                        <ul class="space-y-2 text-sm sm:text-base text-gray-300 mt-4">
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem] mt-2"></i> Digital twin for routes with predictive ETA & maintenance alerts</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem] mt-2"></i> Automated anomaly detection pushes tasks to Slack & email</li>
+                        </ul>
+                        <div class="case-metrics">
+                            <div class="case-metric">
+                                <strong>-27%</strong>
+                                <span>Delay minutes</span>
+                            </div>
+                            <div class="case-metric">
+                                <strong>2.1M</strong>
+                                <span>Rows synced/hr</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="case-card fade-in">
+                        <div class="case-image">
+                            <img src="assets/predictive-analysis-picture.png" alt="Predictive planning dashboards" class="w-full h-full object-cover" loading="lazy">
+                        </div>
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Consumer Goods</p>
+                        <h3 class="text-2xl font-bold text-white mt-2">AI Demand & Supply Planner</h3>
+                        <p class="text-gray-300 text-base leading-relaxed mt-3">
+                            Delivered machine learning forecasts and what-if scenarios for 420 products across 8 markets with automated commentary.
+                        </p>
+                        <ul class="space-y-2 text-sm sm:text-base text-gray-300 mt-4">
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem] mt-2"></i> Scenario levers for promo, price, and supply shocks</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-circle text-blue-400 text-[0.45rem] mt-2"></i> Narrative insights generated with natural language summaries</li>
+                        </ul>
+                        <div class="case-metrics">
+                            <div class="case-metric">
+                                <strong>+31%</strong>
+                                <span>Forecast accuracy</span>
+                            </div>
+                            <div class="case-metric">
+                                <strong>-22%</strong>
+                                <span>Stockouts</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Industries Section (Updated) - Optimized for mobile -->
+        <section id="industries" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10 space-y-12">
+                <div class="max-w-4xl mx-auto text-center fade-in space-y-6">
+                    <h2 class="section-heading">Industries We Serve</h2>
+                    <p class="text-base sm:text-lg text-gray-300 body-text mx-auto">
+                        Driving growth and innovation across diverse sectors with tailored data analytics solutions.
+                    </p>
+                </div>
+                <!-- Grid for Industries -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
+                    
+                    <!-- Industry 1: Healthcare -->
+                    <div class="industry-card p-6 sm:p-8 fade-in">
+                        <div class="industry-card-content">
+                            <h3>Healthcare</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                Leveraging advanced analytics to improve patient outcomes, optimize resource allocation, and enhance operational efficiency for providers.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Industry 2: Finance -->
+                    <div class="industry-card p-6 sm:p-8 fade-in">
+                        <div class="industry-card-content">
+                            <h3>Finance</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                Providing robust data tools to detect fraud, manage risk, and improve customer engagement for financial institutions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Industry 3: Advertising & Marketing -->
+                    <div class="industry-card p-6 sm:p-8 fade-in">
+                        <div class="industry-card-content">
+                            <h3>Advertising & Marketing</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                Helping businesses understand consumer behavior, optimize marketing campaigns, and maximize ROI through data-driven strategies.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Industry 4: Transportation -->
+                    <div class="industry-card p-6 sm:p-8 fade-in">
+                        <div class="industry-card-content">
+                            <h3>Transportation</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                Assisting in optimizing logistics, improving safety, and enhancing customer experience through comprehensive traffic and operational analytics.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Industry 5: Education -->
+                    <div class="industry-card p-6 sm:p-8 fade-in">
+                        <div class="industry-card-content">
+                            <h3>Education</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                Supporting institutions to improve student outcomes and enhance administrative efficiency with insights into performance and enrollment trends.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Industry 6: Hospitality -->
+                    <div class="industry-card p-6 sm:p-8 fade-in">
+                        <div class="industry-card-content">
+                            <h3>Hospitality</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                Enhancing customer satisfaction and optimizing pricing with insights into preferences, booking patterns, and service quality.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Industry 7: Telecommunications -->
+                    <div class="industry-card p-6 sm:p-8 fade-in">
+                        <div class="industry-card-content">
+                            <h3>Telecommunications</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                Improving network performance and customer service with analytics to predict churn and deliver targeted promotions.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section (Updated) - Optimized for mobile -->
+        <section id="testimonials" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10 space-y-12">
+                <div class="max-w-4xl mx-auto text-center fade-in space-y-6">
+                    <h2 class="section-heading">What Our Clients Say</h2>
+                    <p class="text-base sm:text-lg text-gray-300 body-text mx-auto">
+                        Discover how we've helped businesses make data-driven decisions.
+                    </p>
+                </div>
+                
+                <!-- Testimonials Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
+                    
+                    <!-- Testimonial 1: Palesa Mkhulisi -->
+                    <div class="testimonial-card p-6 sm:p-8 fade-in">
+                        <blockquote class="testimonial-quote text-sm sm:text-base lg:text-lg text-gray-300 flex-grow mb-6">
+                            <p>Ubuntu Data Projects is an exceptional data analytics company. Their team transforms complex data into clear, actionable insights, tailored to specific business needs. Their innovative approach and cutting-edge technology have greatly improved our decision-making and efficiency. Highly recommended for any organization seeking strategic growth through data.</p>
+                        </blockquote>
+                        <footer class="mt-auto">
+                            <div class="flex items-center space-x-4">
+                                <div class="testimonial-profile-img">
+                                    <img src="assets/palesa-mkhulisi.png" alt="Palesa Mkhulisi" class="w-full h-full object-cover" loading="lazy">
+                                </div>
+                                <div>
+                                    <p class="text-sm sm:text-base font-bold text-white">Palesa Mkhulisi</p>
+                                    <p class="text-xs sm:text-sm text-gray-400">
+                                        <a href="https://www.linkedin.com/company/the-link-pr-and-marketing-solutions/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3B2MMMQ89ZQRKXpdgbI%2BT5Wg%3D%3D" 
+                                           target="_blank" 
+                                           class="text-blue-400 hover:text-blue-300 hover:underline transition-all duration-300 ease">
+                                            The Link PR and Marketing Solutions
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+
+                    <!-- Testimonial 2: Mpho Podile -->
+                    <div class="testimonial-card p-6 sm:p-8 fade-in">
+                        <blockquote class="testimonial-quote text-sm sm:text-base lg:text-lg text-gray-300 flex-grow mb-6">
+                            <p>Working with Ubuntu Data Projects has been an outstanding experience for Bakwena Innovation Den. Their expertise in data analytics and commitment to delivering high-quality solutions have significantly enhanced our projects. The collaboration was seamless, and their innovative approach helped us achieve our goals efficiently. We highly recommend Ubuntu Data Projects for their professionalism and exceptional service.</p>
+                        </blockquote>
+                        <footer class="mt-auto">
+                            <div class="flex items-center space-x-4">
+                                <div class="testimonial-profile-img">
+                                    <img src="assets/mpho-podile.png" alt="Mpho Podile" class="w-full h-full object-cover" loading="lazy">
+                                </div>
+                                <div>
+                                    <p class="text-sm sm:text-base font-bold text-white">Mpho Podile</p>
+                                    <p class="text-xs sm:text-sm text-gray-400">
+                                        <a href="https://www.linkedin.com/company/bakwena-innovation-den/" 
+                                           target="_blank" 
+                                           class="text-blue-400 hover:text-blue-300 hover:underline transition-all duration-300 ease">
+                                            Bakwena Innovation Den
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+
+                    <!-- Testimonial 3: Brian Seane -->
+                    <div class="testimonial-card p-6 sm:p-8 fade-in">
+                        <blockquote class="testimonial-quote text-sm sm:text-base lg:text-lg text-gray-300 flex-grow mb-6">
+                            <p>Collaborating with Ubuntu Data Projects has been an incredible experience for Epoxxy & Co. Their expertise in data analytics and innovative solutions have significantly enhanced our creative projects. The team at Ubuntu Data Projects is professional, knowledgeable, and dedicated to delivering exceptional results. We highly recommend them for their outstanding service and commitment to excellence.</p>
+                        </blockquote>
+                        <footer class="mt-auto">
+                            <div class="flex items-center space-x-4">
+                                <div class="testimonial-profile-img">
+                                    <img src="assets/brian-seane.png" alt="Brian Seane" class="w-full h-full object-cover" loading="lazy">
+                                </div>
+                                <div>
+                                    <p class="text-sm sm:text-base font-bold text-white">Brian Seane</p>
+                                    <p class="text-xs sm:text-sm text-gray-400">
+                                        <a href="https://www.linkedin.com/in/brianseane/" 
+                                           target="_blank" 
+                                           class="text-blue-400 hover:text-blue-300 hover:underline transition-all duration-300 ease">
+                                            Epoxxy and Co
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Enablement & Insights Section -->
+        <section id="insights" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10 space-y-12">
+                <div class="max-w-4xl mx-auto text-center fade-in space-y-6">
+                    <h2 class="section-heading">Enablement & Insight Ops</h2>
+                    <p class="text-lg sm:text-xl text-gray-300 body-text mx-auto">
+                        Technology alone isn't enough. We design the rituals, playbooks, and coaching programs that keep your teams curious and confident.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="insight-card fade-in">
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Enablement</p>
+                        <h3 class="text-2xl font-bold text-white mt-2">Ubuntu Data Academy</h3>
+                        <p class="text-gray-300 text-base leading-relaxed mt-3">
+                            Build data literacy at every level with modular training paths, office hours, and adoption analytics.
+                        </p>
+                        <ul class="mt-4 text-sm sm:text-base text-gray-200 space-y-2">
+                            <li><i class="fas fa-check text-blue-400 mr-2"></i> Executive storytelling workshops</li>
+                            <li><i class="fas fa-check text-blue-400 mr-2"></i> Analyst & citizen developer bootcamps</li>
+                            <li><i class="fas fa-check text-blue-400 mr-2"></i> Adoption scorecards & champions network</li>
+                        </ul>
+                    </div>
+                    <div class="insight-card fade-in">
+                        <p class="text-xs uppercase tracking-[0.3em] text-blue-200">Technology Stack</p>
+                        <h3 class="text-2xl font-bold text-white mt-2">Certified in your ecosystem</h3>
+                        <p class="text-gray-300 text-base leading-relaxed mt-3">
+                            We design on the platforms you trust and integrate seamlessly with your IT governance framework.
+                        </p>
+                        <div class="tool-grid">
+                            <span class="tool-pill">Microsoft Fabric</span>
+                            <span class="tool-pill">Power BI</span>
+                            <span class="tool-pill">Tableau</span>
+                            <span class="tool-pill">Azure Synapse</span>
+                            <span class="tool-pill">Snowflake</span>
+                            <span class="tool-pill">Databricks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Updated Contact Section - Optimized for mobile -->
+        <section id="contact" class="py-16 md:py-24 lg:py-32 relative content-bg">
+            <div class="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
+                <!-- Grid Container -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
+                    
+                    <!-- Left Column: Form -->
+                    <div class="fade-in space-y-8">
+                        <div class="space-y-4">
+                            <h2 class="section-heading">Get in Touch</h2>
+                            <p class="text-lg sm:text-xl text-gray-300 body-text leading-relaxed">
+                                We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+                            </p>
+                        </div>
+                        
+                        <form action="https://formsubmit.co/info@ubuntudataprojects.com" method="POST" class="space-y-6">
+                            <div>
+                                <label for="name" class="form-label block">Your Name</label>
+                                <input type="text" name="name" id="name" autocomplete="name" placeholder="e.g. Jane Doe" required class="w-full rounded-xl bg-slate-800 placeholder-gray-500 focus:outline-none text-base text-gray-200 h-14">
+                            </div>
+                            <div>
+                                <label for="email" class="form-label block">Your Email</label>
+                                <input type="email" name="email" id="email" autocomplete="email" placeholder="e.g. jane.doe@example.com" required class="w-full rounded-xl bg-slate-800 placeholder-gray-500 focus:outline-none text-base text-gray-200 h-14">
+                            </div>
+                            <div>
+                                <label for="subject" class="form-label block">Subject</label>
+                                <input type="text" name="subject" id="subject" placeholder="e.g. Data Analytics Inquiry" required class="w-full rounded-xl bg-slate-800 placeholder-gray-500 focus:outline-none text-base text-gray-200 h-14">
+                            </div>
+                            <div>
+                                <label for="message" class="form-label block">Message</label>
+                                <textarea name="body" id="message" rows="5" placeholder="Tell us more about your project..." required class="w-full rounded-xl bg-slate-800 placeholder-gray-500 focus:outline-none text-base text-gray-200 resize-none"></textarea>
+                            </div>
+                            <input type="hidden" name="_subject" value="New message from Ubuntu Data Projects website">
+                            <input type="hidden" name="_captcha" value="false">
+                            <div>
+                                <button type="submit" class="w-full rounded-xl text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+                                    <span class="flex items-center justify-center gap-2">
+                                        <span>Send Message</span>
+                                        <i class="fas fa-paper-plane"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right Column: Contact Info & Map -->
+                    <div class="space-y-10 lg:space-y-12 fade-in">
+                        <div class="space-y-8">
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Contact Information</h3>
+                            <div class="space-y-6">
+                                <!-- Phone -->
+                                <div class="flex items-center space-x-5 contact-icon-wrapper">
+                                    <div class="contact-icon-circle w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full text-white text-xl sm:text-2xl flex-shrink-0">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-lg sm:text-xl font-semibold text-white mb-1">Phone</h4>
+                                        <a href="tel:+27111234567" class="text-blue-400 hover:text-blue-300 text-base sm:text-lg transition-all duration-300 ease hover:underline">+27 11 123 4567</a>
+                                    </div>
+                                </div>
+                                <!-- Email -->
+                                <div class="flex items-center space-x-5 contact-icon-wrapper">
+                                    <div class="contact-icon-circle w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center rounded-full text-white text-xl sm:text-2xl flex-shrink-0">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="text-lg sm:text-xl font-semibold text-white mb-1">Email</h4>
+                                        <a href="mailto:info@ubuntudataprojects.com" class="text-blue-400 hover:text-blue-300 text-base sm:text-lg transition-all duration-300 ease hover:underline break-all">info@ubuntudataprojects.com</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Connect With Us -->
+                        <div class="space-y-8">
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Connect With Us</h3>
+                            <div class="flex flex-wrap gap-4">
+                                <!-- LinkedIn -->
+                                <a href="https://www.linkedin.com/company/ubuntu-data-projects/" target="_blank" class="flex items-center justify-center rounded-full text-white text-xl sm:text-2xl transition-all duration-300 social-icon-hover" style="min-width: 48px; min-height: 48px; width: 48px; height: 48px;" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <!-- Instagram -->
+                                <a href="https://www.instagram.com/ubuntudata/?igsh=MXR2bDAxcTMyNmp6Zg%3D%3D#" target="_blank" class="flex items-center justify-center rounded-full text-white text-xl sm:text-2xl transition-all duration-300 social-icon-hover" style="min-width: 48px; min-height: 48px; width: 48px; height: 48px;" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <!-- WhatsApp -->
+                                <a href="https://wa.me/27111234567" target="_blank" class="flex items-center justify-center rounded-full text-white text-xl sm:text-2xl transition-all duration-300 social-icon-hover" style="min-width: 48px; min-height: 48px; width: 48px; height: 48px;" aria-label="WhatsApp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <!-- Twitter -->
+                                <a href="https://x.com/UbuntuData?t=_sDyd01SUf7iodLM8sNQVw&s=09" target="_blank" class="flex items-center justify-center rounded-full text-white text-xl sm:text-2xl transition-all duration-300 social-icon-hover" style="min-width: 48px; min-height: 48px; width: 48px; height: 48px;" aria-label="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Map Box -->
+                        <div class="space-y-6">
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-white">Our Location</h3>
+                            <div class="map-container p-6">
+                                <div class="flex items-start space-x-3 mb-5">
+                                    <i class="fas fa-map-marker-alt text-blue-400 text-xl mt-1"></i>
+                                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed">19 Ameshoff Street, Braamfontein, Johannesburg, 2001</p>
+                                </div>
+                                <div class="map-iframe-wrapper h-56 sm:h-72 w-full">
+                                    <iframe 
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.007689945037!2d28.03704381503!3d-26.19656408344169!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c410bf1cfc9%3A0x863b2f5b6f4c58f!2s19%20Ameshoff%20St%2C%20Braamfontein%2C%20Johannesburg%2C%202001%2C%20South%20Africa!5e0!3m2!1sen!2sus!4v1678886400000!5m2!1sen!2sus" 
+                                        width="100%" 
+                                        height="100%"
+                                        style="border:0;" 
+                                        allowfullscreen="" 
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade"
+                                        class="map-iframe">
+                                    </iframe>
+                                </div>
+                                <div class="mt-5">
+                                    <a href="https://maps.google.com/maps?q=19+Ameshoff+Street,+Braamfontein,+Johannesburg,+South+Africa" target="_blank" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-all duration-300 ease text-base sm:text-lg font-medium hover:gap-3">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        <span>Open in Google Maps</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/90 backdrop-blur-sm text-gray-400">
+        <div class="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <!-- Copyright -->
+                <div class="text-center md:text-left">
+                    <p class="text-xs sm:text-sm">
+                        &copy; 2024 Ubuntu Data Projects. All rights reserved.
+                    </p>
+                </div>
+                
+                <!-- Footer Nav (Updated) -->
+                <div class="flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-2 mt-4 sm:mt-6 md:mt-0">
+                    <a href="#" class="text-xs sm:text-sm hover:text-blue-400 transition-all duration-300 ease">Privacy Policy</a>
+                    <a href="#" class="text-xs sm:text-sm hover:text-blue-400 transition-all duration-300 ease">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu and Optimized Scroll Animations -->
+    <script>
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            var menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('#mobile-menu a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Optimized scroll animation using Intersection Observer for better performance
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            // Check if Intersection Observer is supported
+            if ('IntersectionObserver' in window) {
+                // Use Intersection Observer for better performance (60fps)
+                const observerOptions = {
+                    root: null, // viewport
+                    rootMargin: '0px 0px -150px 0px', // Trigger 150px before element enters viewport
+                    threshold: 0 // Trigger as soon as any part is visible
+                };
+                
+                const fadeInObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            // Add visible class to trigger animation
+                            entry.target.classList.add('visible');
+                            
+                            // Stop observing this element after it's animated
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+                
+                // Observe all fade-in elements
+                fadeElements.forEach(function(element) {
+                    fadeInObserver.observe(element);
+                });
+                
+            } else {
+                // Fallback for browsers that don't support Intersection Observer
+                const fadeInOnScroll = function() {
+                    fadeElements.forEach(function(element) {
+                        const elementTop = element.getBoundingClientRect().top;
+                        const elementVisible = 150;
+                        
+                        if (elementTop < window.innerHeight - elementVisible) {
+                            element.classList.add('visible');
+                        }
+                    });
+                };
+                
+                // Initial check
+                fadeInOnScroll();
+                
+                // Check on scroll with throttling for better performance
+                let scrollTimeout;
+                window.addEventListener('scroll', function() {
+                    if (scrollTimeout) {
+                        window.cancelAnimationFrame(scrollTimeout);
+                    }
+                    scrollTimeout = window.requestAnimationFrame(function() {
+                        fadeInOnScroll();
+                    });
+                }, { passive: true });
+            }
+        });
+
+        // Performance optimization: Use passive event listeners for scroll
+        // This allows the browser to optimize scrolling performance
+        document.addEventListener('scroll', function() {
+            // Scroll handler (if needed in future)
+        }, { passive: true });
+
+        // Performance optimization: Preload critical images
+        window.addEventListener('load', function() {
+            // Remove will-change from elements after initial animations complete
+            setTimeout(function() {
+                const animatedElements = document.querySelectorAll('.fade-in.visible');
+                animatedElements.forEach(function(element) {
+                    element.style.willChange = 'auto';
+                });
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>
