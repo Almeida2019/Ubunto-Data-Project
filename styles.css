@@ -1,0 +1,330 @@
+/* 
+ * Ubuntu Data Projects - Premium Design System
+ * 
+ * Theme: Deep Tech / Data Intelligence
+ * Colors: Midnight Blue, Electric Blue, Cyan, Slate
+ * Style: Glassmorphism, Bento Grids, Mesh Gradients
+ */
+
+:root {
+    /* Color Palette - Deep & Rich */
+    --color-bg-dark: #020617;
+    /* Slate 950 - Darker than original */
+    --color-bg-card: rgba(15, 23, 42, 0.6);
+    --color-bg-card-hover: rgba(30, 41, 59, 0.8);
+
+    --color-primary: #3b82f6;
+    /* Blue 500 */
+    --color-primary-glow: rgba(59, 130, 246, 0.5);
+    --color-accent: #06b6d4;
+    /* Cyan 500 */
+    --color-accent-glow: rgba(6, 182, 212, 0.5);
+
+    --color-text-main: #f8fafc;
+    /* Slate 50 */
+    --color-text-muted: #94a3b8;
+    /* Slate 400 */
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    --gradient-dark: linear-gradient(to bottom, #020617, #0f172a);
+    --gradient-mesh: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+
+    /* Glassmorphism */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    --backdrop-blur: blur(12px);
+
+    /* Spacing & Layout */
+    --radius-sm: 0.5rem;
+    --radius-md: 1rem;
+    --radius-lg: 1.5rem;
+    --radius-xl: 2rem;
+}
+
+/* Global Reset & Base Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-main);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    /* Animated Mesh Background */
+    background:
+        radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.15), transparent 25%),
+        linear-gradient(to bottom, #020617, #0f172a);
+    background-size: 200% 200%;
+    animation: bgPulse 15s ease infinite alternate;
+}
+
+@keyframes bgPulse {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+/* Typography Enhancements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    letter-spacing: -0.02em;
+}
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.3));
+}
+
+/* Premium Card Style (Glassmorphism) */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    border: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-lg);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 3D Tilt Effect Classes */
+.tilt-card {
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+}
+
+.tilt-content {
+    transform: translateZ(20px);
+}
+
+/* Spotlight Effect */
+.glass-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.glass-card:hover::after {
+    opacity: 1;
+}
+
+.glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+/* Bento Grid Layout Utilities */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .bento-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, minmax(250px, auto));
+    }
+
+    .bento-item-large {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .bento-item-wide {
+        grid-column: span 2;
+    }
+
+    .bento-item-tall {
+        grid-row: span 2;
+    }
+}
+
+/* Button Styles */
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.btn-primary:hover::before {
+    opacity: 1;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 30px -5px rgba(59, 130, 246, 0.6);
+}
+
+/* Animations */
+@keyframes float {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: scale(0.95);
+    }
+}
+
+.animate-pulse-soft {
+    animation: pulse-soft 3s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.hero-animate {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Typing Animation Cursor */
+.typing-cursor {
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    background-color: var(--color-accent);
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    box-shadow: 0 0 10px var(--color-accent);
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* 3D Icon Effects */
+.icon-3d {
+    transform: translateZ(50px);
+    filter: drop-shadow(0 15px 15px rgba(0, 0, 0, 0.4));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tilt-card:hover .icon-3d {
+    transform: translateZ(80px) scale(1.2);
+    filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.5));
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Navbar Blur */
+.nav-blur {
+    background: rgba(2, 6, 23, 0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 3D Cube Loader (Optional for future use) */
+.cube-loader {
+    transform-style: preserve-3d;
+    animation: rotate 4s infinite linear;
+}
