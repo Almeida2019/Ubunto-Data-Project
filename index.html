@@ -746,15 +746,44 @@
             }
         });
 
-        // Set Zoho Redirect URL dynamically
+        // --- Hidden Iframe Redirect Logic ---
+        let formSubmitted = false;
+
         document.addEventListener('DOMContentLoaded', () => {
-            const redirectInput = document.querySelector('input[name="zf_redirect_url"]');
-            if (redirectInput) {
-                // Construct absolute URL for thank-you.html
-                const currentUrl = window.location.href;
-                const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                redirectInput.value = `${baseUrl}/thank-you.html`;
+            const form = document.querySelector('#contact form'); // Corrected selector to target the form within the contact section
+            const iframe = document.createElement('iframe');
+
+            // Setup hidden iframe
+            iframe.name = 'hidden_iframe';
+            iframe.id = 'hidden_iframe';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+
+            // Link form to iframe
+            if (form) {
+                form.target = 'hidden_iframe';
+
+                form.addEventListener('submit', () => {
+                    formSubmitted = true;
+                    // Change button text to indicate processing
+                    const btn = form.querySelector('button[type="submit"]');
+                    if (btn) {
+                        btn.innerHTML = '<span class="flex items-center justify-center gap-2"><i class="fas fa-spinner fa-spin"></i> Sending...</span>';
+                        btn.disabled = true;
+                        btn.classList.add('opacity-75', 'cursor-not-allowed');
+                    }
+                });
             }
+
+            // Handle redirect after submission
+            iframe.onload = function () {
+                if (formSubmitted) {
+                    // Construct absolute URL for thank-you.html
+                    const currentUrl = window.location.href;
+                    const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+                    window.location.href = `${baseUrl}/thank-you.html`;
+                }
+            };
         });
 
         // --- Typing Animation ---
